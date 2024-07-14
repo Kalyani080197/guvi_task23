@@ -1,0 +1,162 @@
+1. TASK 1 : To Automate facebook signup using selenium script:
+<dependencies>
+    <dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-java</artifactId>
+        <version>4.1.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-chrome-driver</artifactId>
+        <version>4.1.0</version>
+    </dependency>
+</dependencies>
+
+Here's the Java code for automating the Facebook sign-up process:
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+
+public class FacebookSignUpAutomation {
+    public static void main(String[] args) {
+        // Set the path to your ChromeDriver
+        System.setProperty("webdriver.chrome.driver", "path_to_your_chromedriver"); // e.g., "C:/path_to_chromedriver/chromedriver.exe"
+
+        // Create a new instance of the Chrome driver
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            // Step 2: Navigate to the Facebook website
+            driver.get("https://www.facebook.com/");
+
+            // Step 3: Verify that the website has been redirected to the Facebook homepage
+            if (!driver.getTitle().contains("Facebook")) {
+                System.out.println("Not on Facebook homepage!");
+                return;
+            }
+
+            // Step 4: Click on the "Create new account" button
+            WebElement createAccountBtn = driver.findElement(By.xpath("//*[@id=\"u_0_2\"]"));  // The XPath may need updating
+            createAccountBtn.click();
+
+            // Wait for the sign-up modal to appear
+            Thread.sleep(2000);
+
+            // Step 5: Enter the first name as "Test" and last name as "User"
+            WebElement firstNameField = driver.findElement(By.name("firstname"));
+            firstNameField.sendKeys("Test");
+
+            WebElement lastNameField = driver.findElement(By.name("lastname"));
+            lastNameField.sendKeys("User");
+
+            // Step 6: Enter a valid email address
+            WebElement emailField = driver.findElement(By.name("reg_email__"));
+            emailField.sendKeys("testuser@test.com");
+
+            // Step 7: Enter a strong password
+            WebElement passwordField = driver.findElement(By.name("reg_passwd__"));
+            passwordField.sendKeys("StrongPassword123");
+
+            // Step 8: Select the date of birth
+            Select daySelect = new Select(driver.findElement(By.id("day")));
+            daySelect.selectByValue("11");
+
+            Select monthSelect = new Select(driver.findElement(By.id("month")));
+            monthSelect.selectByValue("5");  // May is the 5th month
+
+            Select yearSelect = new Select(driver.findElement(By.id("year")));
+            yearSelect.selectByValue("1985");
+
+            // Step 9: Select the gender
+            WebElement genderRadio = driver.findElement(By.xpath("//input[@value='2']"));  // '2' for Female, '1' for Male
+            genderRadio.click();
+
+            // Step 10: Click on the "Sign Up" button
+            WebElement signUpBtn = driver.findElement(By.name("websubmit"));
+            signUpBtn.click();
+
+            // Step 11: Verify successful registration
+            Thread.sleep(5000);  // Wait for redirection
+            if (driver.getTitle().contains("Facebook")) {
+                System.out.println("Sign up successful and redirected to Facebook homepage!");
+            } else {
+                System.out.println("Sign up failed or redirection did not happen!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Close the browser
+            driver.quit();
+        }
+    }
+}
+
+TASK 2: To Automate drag and drop using selenium
+<dependencies>
+    <dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-java</artifactId>
+        <version>4.1.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-chrome-driver</artifactId>
+        <version>4.1.0</version>
+    </dependency>
+</dependencies>
+
+Here's the Java code for automating the drag and drop operation:
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+public class DragAndDropAutomation {
+    public static void main(String[] args) {
+        // Set the path to your ChromeDriver
+        System.setProperty("webdriver.chrome.driver", "path_to_your_chromedriver"); // e.g., "C:/path_to_chromedriver/chromedriver.exe"
+
+        // Create a new instance of the Chrome driver
+        WebDriver driver = new ChromeDriver();
+
+        try {
+            // Step 2: Navigate to the jQueryUI droppable website
+            driver.get("https://jqueryui.com/droppable/");
+
+            // Switch to the frame that contains the droppable elements
+            driver.switchTo().frame(0);
+
+            // Step 3: Find the source element and the target element
+            WebElement sourceElement = driver.findElement(By.id("draggable"));
+            WebElement targetElement = driver.findElement(By.id("droppable"));
+
+            // Step 4: Perform the drag and drop operation
+            Actions actions = new Actions(driver);
+            actions.dragAndDrop(sourceElement, targetElement).perform();
+
+            // Step 5: Verify that the drag and drop operation is successful by checking the color property of the target element's CSS
+            String backgroundColor = targetElement.getCssValue("background-color");
+            if ("rgba(255, 250, 144, 1)".equals(backgroundColor)) { // The color might vary; adjust as needed
+                System.out.println("Drag and drop successful! Background color changed.");
+            } else {
+                System.out.println("Drag and drop failed! Background color did not change.");
+            }
+
+            // Step 6: Verify that the text of the target element has changed to "Dropped!" after the drop
+            String targetText = targetElement.getText();
+            if ("Dropped!".equals(targetText)) {
+                System.out.println("Text changed to 'Dropped!' after the drop.");
+            } else {
+                System.out.println("Text did not change after the drop.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Close the browser
+            driver.quit();
+        }
+    }
+}
